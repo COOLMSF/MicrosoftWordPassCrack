@@ -22,6 +22,10 @@ from typing import Optional
 
 import PySide6.QtCore
 
+# Add parent directory to Python path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from advanced_cracker import PasswordCracker, CrackingMode
+
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
 from modules import *
@@ -104,6 +108,9 @@ class MainWindow(QMainWindow):
         widgets.btn_widgets.clicked.connect(self.buttonClick)
         
         # self.ui.pushButton.clicked.connect(self.pushButton_clicked)
+
+        widgets.pushButton_openFile.clicked.connect(self.pushButton_openFile_clicked)
+        widgets.pushButton_check.clicked.connect(self.pushButton_check_clicked)
         
         self.obj = Worker()
         self.thread = QThread()
@@ -198,6 +205,72 @@ class MainWindow(QMainWindow):
         box.setText("线程已开启")
         box.exec()
         
+    def pushButton_openFile_clicked(self):
+        """
+        Open file dialog to select a Word document
+        """
+        file_filter = "Word Document (*.docx *.doc);;All Files (*.*)"
+        initial_dir = os.path.expanduser("~\Documents")
+        
+        file_path, _ = QFileDialog.getOpenFileName(
+            parent=self,
+            caption="Select Word Document",
+            dir=initial_dir,
+            filter=file_filter
+        )
+        
+        if file_path:
+            # Store the selected file path
+            self.selected_file_path = file_path
+            # Update UI to show selected file
+            file_name = os.path.basename(file_path)
+            self.ui.label.setText(f"Selected file: {file_name}")
+            self.ui.plainTextEdit.appendPlainText(f"Loaded document: {file_path}\n")
+            # Enable check button only after file is selected
+            self.ui.pushButton_check.setEnabled(True)
+            self.ui.lineEdit.setText(file_path)
+        else:
+            self.ui.plainTextEdit.appendPlainText("No file selected\n")
+            self.ui.pushButton_check.setEnabled(False)
+
+    def pushButton_check_clicked(self):
+        file_to_crack = self.ui.lineEdit.text().strip()
+        wordlist = "../wordlist.txt"
+        mode = self.ui.comboBox.currentText().split(" ")[0].lower()
+        threads = 4
+        chunk_size = 1000
+        timeout = 3600
+        verify_hash = False
+
+        try:
+            cracker = PasswordCracker(
+                file_to_crack,
+                wordlist,
+                mode=CrackingMode(mode),
+                threads=threads,
+                chunk_size=chunk_size,
+                timeout=timeout,
+                verify_hash=verify_hash
+            )
+
+            password, duration, stats = cracker.crack()
+
+            if password:
+                self.ui.plainTextEdit.appendPlainText(f"\nSuccess! Password found: {password}")
+                self.ui.plainTextEdit.appendPlainText(f"Time taken: {duration:.2f} seconds")
+                self.ui.plainTextEdit.appendPlainText(f"Attempts: {stats.attempts}")
+            else:
+                self.ui.plainTextEdit.appendPlainText("\nPassword not found")
+                if stats.errors:
+                    self.ui.plainTextEdit.appendPlainText("Errors encountered:")
+                    for error in stats.errors:
+                        self.ui.plainTextEdit.appendPlainText(f"- {error}")
+
+        except Exception as e:
+            self.ui.plainTextEdit.appendPlainText(f"Critical error: {str(e)}")
+            # Don't exit the application on error, just show the error message
+            # sys.exit(1)
+
     # RESIZE EVENTS
     # ///////////////////////////////////////////////////////////////
     def resizeEvent(self, event):

@@ -1,0 +1,17 @@
+2025-04-13 19:09:29,429 - __main__ - INFO - Loaded 6 passwords from wordlist
+2025-04-13 19:09:29,429 - __main__ - INFO - Starting multi-threaded password cracking with 4 workers...
+2025-04-13 19:09:29,433 - __main__ - ERROR - Error attempting password 'aaaa': File is not a zip file
+2025-04-13 19:09:29,433 - __main__ - ERROR - Error attempting password 'bbbb': File is not a zip file
+2025-04-13 19:09:29,433 - __main__ - ERROR - Error attempting password 'cccc': File is not a zip file
+2025-04-13 19:09:29,433 - __main__ - INFO - Trying password 1/6: aaaa
+2025-04-13 19:09:29,433 - __main__ - INFO - Trying password 2/6: bbbb
+2025-04-13 19:09:29,433 - __main__ - ERROR - Error attempting password '123qwe': File is not a zip file
+2025-04-13 19:09:29,433 - __main__ - ERROR - Error attempting password '@123711...': File is not a zip file
+2025-04-13 19:09:29,433 - __main__ - ERROR - Error attempting password 'dddd': File is not a zip file
+2025-04-13 19:09:29,435 - __main__ - INFO - Trying password 3/6: cccc
+2025-04-13 19:09:29,435 - __main__ - INFO - Trying password 4/6: 123qwe
+2025-04-13 19:09:29,435 - __main__ - INFO - Trying password 5/6: @123711...
+2025-04-13 19:09:29,435 - __main__ - INFO - Trying password 6/6: dddd
+2025-04-13 19:09:29,435 - __main__ - INFO - 
+Password not found in wordlist
+2025-04-13 19:09:29,435 - __main__ - INFO - Total time: 0.01 seconds

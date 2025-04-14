@@ -240,7 +240,7 @@ class MainWindow(QMainWindow):
         threads = 4
         chunk_size = 1000
         timeout = 3600
-        verify_hash = False
+        verify_hash = True
 
         try:
             cracker = PasswordCracker(

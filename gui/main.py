@@ -259,6 +259,24 @@ class MainWindow(QMainWindow):
                 self.ui.plainTextEdit.appendPlainText(f"\nSuccess! Password found: {password}")
                 self.ui.plainTextEdit.appendPlainText(f"Time taken: {duration:.2f} seconds")
                 self.ui.plainTextEdit.appendPlainText(f"Attempts: {stats.attempts}")
+                
+                # Get current row count
+                current_row = self.ui.tableWidget.rowCount()
+                # Insert new row at the end
+                self.ui.tableWidget.insertRow(current_row)
+                
+                word = self.ui.lineEdit.text()
+                # Use current_row instead of undefined i
+
+                if hasattr(self, 'success_number'):
+                    self.success_number += 1
+                else:
+                    self.success_number = 1
+
+                self.ui.tableWidget.setItem(self.success_number, 0, QTableWidgetItem(word))
+                self.ui.tableWidget.setItem(self.success_number, 1, QTableWidgetItem(password))
+                self.ui.tableWidget.setItem(self.success_number, 2, QTableWidgetItem(f"{duration:.2f}"))
+                 
             else:
                 self.ui.plainTextEdit.appendPlainText("\nPassword not found")
                 if stats.errors:
